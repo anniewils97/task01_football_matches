@@ -21,15 +21,17 @@ SELECT * FROM matches WHERE hometeam = 'Barcelona' OR awayteam = 'Barcelona';
 3) What are the names of the Scottish divisions included?
 
 ```sql
-<!-- Copy solution here -->
-
+SELECT DISTINCT name FROM divisions WHERE name LIKE '%Scottish%';
 
 ```
 
 4) Find the value of the `code` for the `Bundesliga` division. Use that code to find out how many matches Freiburg have played in that division. HINT: You will need to query both tables
 
 ```sql
-<!-- Copy solution here -->
+-- SELECT * FROM divisions WHERE name = 'Bundesliga';
+-- SELECT * FROM matches WHERE division_code = 'D1' AND (hometeam = 'Freiburg' OR awayteam = 'Freiburg');
+SELECT COUNT(*) FROM matches WHERE division_code = 'D1' AND (hometeam = 'Freiburg' OR awayteam = 'Freiburg');
+
 
 
 ```
@@ -37,7 +39,7 @@ SELECT * FROM matches WHERE hometeam = 'Barcelona' OR awayteam = 'Barcelona';
 5)  Find the teams which include the word "City" in their name. HINT: Not every team has been entered into the database with their full name, eg. `Norwich City` are listed as `Norwich`. If your query is correct it should return four teams.
 
 ```sql
-<!-- Copy solution here -->
+SELECT DISTINCT hometeam FROM matches WHERE hometeam LIKE '%City%';
 
 
 ```
@@ -45,8 +47,10 @@ SELECT * FROM matches WHERE hometeam = 'Barcelona' OR awayteam = 'Barcelona';
 6) How many different teams have played in matches recorded in a French division?
 
 ```sql
-<!-- Copy solution here -->
-
+-- SELECT * FROM divisions WHERE country = 'France';
+-- SELECT * FROM matches WHERE division_code IN('F1', 'F2'); all the matches played in a French division
+-- SELECT DISTINCT hometeam FROM matches WHERE division_code IN ('F1', 'F2'); all the unique teams
+SELECT COUNT(DISTINCT hometeam) FROM matches WHERE division_code IN('F1', 'F2');
 
 ```
 
