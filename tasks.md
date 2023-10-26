@@ -57,7 +57,10 @@ SELECT COUNT(DISTINCT hometeam) FROM matches WHERE division_code IN('F1', 'F2');
 7) Have Huddersfield played Swansea in any of the recorded matches?
 
 ```sql
-<!-- Copy solution here -->
+-- all the actual matches they've played in together
+SELECT * FROM matches WHERE hometeam = 'Huddersfield' AND awayteam = 'Swansea' OR hometeam = 'Swansea' AND awayteam = 'Huddersfield';
+-- the number of matches playe together
+SELECT COUNT(*) FROM matches WHERE hometeam = 'Huddersfield' AND awayteam = 'Swansea' OR hometeam = 'Swansea' AND awayteam = 'Huddersfield';
 
 
 ```
@@ -65,7 +68,12 @@ SELECT COUNT(DISTINCT hometeam) FROM matches WHERE division_code IN('F1', 'F2');
 8) How many draws were there in the `Eredivisie` between 2010 and 2015?
 
 ```sql
-<!-- Copy solution here -->
+-- getting the division code
+-- SELECT * FROM divisions WHERE name = 'Eredivisie';
+-- all the draws (431) in full for Eredivisie between those dates
+SELECT * FROM matches WHERE division_code = 'N1' AND (season BETWEEN 2010 AND 2015) AND (ftr = 'D');
+-- the count of 431
+SELECT COUNT(*) FROM matches WHERE division_code = 'N1' AND (season BETWEEN 2010 AND 2015) AND (ftr = 'D');
 
 
 ```
@@ -73,17 +81,25 @@ SELECT COUNT(DISTINCT hometeam) FROM matches WHERE division_code IN('F1', 'F2');
 9) Select the matches played in the Premier League in order of total goals scored (`fthg` + `ftag`) from highest to lowest. When two matches have the same total the match with more home goals (`fthg`) should come first. 
 
 ```sql
-<!-- Copy solution here -->
-
+-- SELECT *, (fthg + ftag) AS Sum FROM matches WHERE division_code = 'E0';
+-- -- first attempt at combining goals
+-- SELECT SUM(fthg) AS total FROM matches WHERE division_code = 'E0'
+-- UNION ALL
+-- SELECT SUM(ftag) AS total FROM matches WHERE division_code = 'E0';
+-- -- second attempt at combining goals + ordering
+-- SELECT 'total' AS source, SUM(fthg + ftag) AS total FROM matches WHERE division_code = 'E0' ORDER BY total DESC;
+-- -- order of totals goals in DESC fashion.
+-- SELECT fthg + ftag AS sum_of_goals FROM matches WHERE division_code = 'E0' ORDER BY sum_of_goals DESC;
+-- now full answer
+SELECT fthg + ftag AS sum_of_goals FROM matches WHERE division_code = 'E0' ORDER BY sum_of_goals DESC, fthg DESC;
 
 ```
 
 10) Find the name of the division in which the most goals were scored in a single season and the year in which it happened.
 
 ```sql
-<!-- Copy solution here -->
-
-
+SELECT division_code, season, SUM(fthg + ftag) AS sum_of_goals FROM matches GROUP BY division_code, season ORDER BY sum_of_goals DESC;
+-- unfinished
 ```
 
 ### Useful Resources
